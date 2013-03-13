@@ -47,7 +47,7 @@ void		Dictionary::findOccurences(std::string const & number, std::string const &
     {
       if (!this->_sentence.empty())
 	{
-	  std::cout << rawNum << ": " << this->_sentence << std::endl;
+	  std::cout << rawNum << ":" << this->_sentence << std::endl;
 	  this->_sentence.clear();
 	}
     }
@@ -57,16 +57,19 @@ void		Dictionary::findOccurences(std::string const & number, std::string const &
 	{
 	  if (sample.length() <= number.length() && isCharInRule(number[0], sample[0]) == true)
 	    {
-	      if (isWordMatches(number, sample) == true)
+	      std::string	numberTmp = number;
+	      if (isWordMatches(numberTmp, sample) == true)
 		{
+		  this->_sentence += " ";
 		  this->_sentence += sample;
-		  this->findOccurences("", rawNum);
+		  std::cout << "num = \"" << numberTmp << "\"" << std::endl;
+		  this->findOccurences(numberTmp, rawNum);
 		}
 	    }
 	}
+      this->_dict.clear();
+      this->_dict.seekg(0, std::ios::beg);
     }
-  this->_dict.clear();
-  this->_dict.seekg(0, std::ios::beg);
 }
 
 bool		Dictionary::isCharInRule(char const & num, char const & sample)
@@ -77,7 +80,7 @@ bool		Dictionary::isCharInRule(char const & num, char const & sample)
   return false;
 }
 
-bool		Dictionary::isWordMatches(std::string const & num, std::string const & sample)
+bool		Dictionary::isWordMatches(std::string & num, std::string const & sample)
 {
   unsigned int		j = 0;
 
@@ -93,6 +96,7 @@ bool		Dictionary::isWordMatches(std::string const & num, std::string const & sam
 	  if (j == num.length() || (i + 1 == sample.length()))
 	    {
 	      //std::cout << "RETURN TRUE" << std::endl;
+	      num.erase(0, j);
 	      return true;
 	    }
 	}

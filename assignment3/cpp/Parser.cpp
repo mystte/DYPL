@@ -30,7 +30,7 @@ void		Parser::launch()
   while (std::getline(this->_numb, sample))
     {
       this->_dict->getSentence(sample);
-      std::cout << "next" << std::endl;
+      //std::cout << "next" << std::endl;
     }
 
 }

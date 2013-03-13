@@ -24,7 +24,7 @@ private:
   void		initRules();
   void		findOccurences(std::string const & number, std::string const & rawnum);
   bool		isCharInRule(char const & num, char const & sample);
-  bool		isWordMatches(std::string const & num, std::string const & sample);
+  bool		isWordMatches(std::string & num, std::string const & sample);
 
 public:
   Dictionary(std::string const & path);
