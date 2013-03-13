@@ -11,7 +11,9 @@ NAME_SH			= assignment3
 
 ## Sources
 SRCS			= main.cpp		\
-			  Parser.cpp
+			  Parser.cpp		\
+			  Dictionary.cpp	\
+			  rules.cpp
 
 ## Objets
 OBJS			= $(SRCS:.cpp=.o)
@@ -23,7 +25,7 @@ ECHO			= echo
 
 
 ## Flags
-CPPFLAGS		= -W -Wall -Wextra -pedantic
+CPPFLAGS		= -W -Wall -Wextra -pedantic -g3
 
 ## Rules
 $(NAME_SH)		: $(OBJS)
