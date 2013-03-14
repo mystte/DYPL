@@ -35,7 +35,7 @@ std::string encode(const std::string & word)
 word_map read_words()
 {
     word_map wp;
-    std::ifstream is("dictionary.txt");
+    std::ifstream is("./test/dictionary.txt");
     std::string word;
     while (std::getline(is, word))
         wp[encode(word)].push_back(word);
@@ -80,7 +80,7 @@ int main()
 {
     const word_map dict(read_words());
 
-    std::ifstream is("input.txt");
+    std::ifstream is("./test/input.txt");
     std::string raw_number;
     while (std::getline(is, raw_number))
         find_sentences(dict, raw_number, filtered(raw_number), "", false);

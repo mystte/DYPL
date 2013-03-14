@@ -28,9 +28,5 @@ void		Parser::launch()
 {
   std::string	sample;
   while (std::getline(this->_numb, sample))
-    {
-      this->_dict->getSentence(sample);
-      //std::cout << "next" << std::endl;
-    }
-
+    this->_dict->getSentence(sample);
 }

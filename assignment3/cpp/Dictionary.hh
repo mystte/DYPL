@@ -18,17 +18,24 @@ private:
   std::map<char, char>					_rulesByletter;
   std::map<char, std::vector<std::string> >		_dictMap;
   std::string						_sentence;
-  bool							_wordFound;
 
   Dictionary();
   
 private:
+
+  enum		wordStatus
+    {
+      VALID_WORD,
+      INVALID_WORD,
+      COMPLETE
+    };
+
+  void		showSentence(std::string const &);
   void		initRules();
   void		findOccurences(std::string const & number, std::string const & rawnum);
   bool		isCharInRule(char const & num, char const & sample);
-  bool		isWordMatches(std::string & num, std::string const & sample);
-  void		resetDict();
-  void		completeWord(std::string &numberTmp, std::string const & rawNum, std::string const & sample);
+  wordStatus   	isWordMatches(std::string & num, std::string const & sample);
+
   std::vector<std::string> const  	appendVector(std::vector<std::string> const & v1, std::vector<std::string> const & v2);
 
 public:

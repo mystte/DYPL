@@ -25,8 +25,7 @@ ECHO			= echo
 
 
 ## Flags
-CPPFLAGS		= -W -Wall -Wextra -pedantic -g3
-
+CPPFLAGS		= -W -Wall -Wextra -pedantic
 ## Rules
 $(NAME_SH)		: $(OBJS)
 		  	@$(CXX) -o $(NAME_SH) $(OBJS) $(CPPFLAGS)

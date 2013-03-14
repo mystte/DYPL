@@ -1,8 +1,7 @@
 #include "Dictionary.hh"
 
 Dictionary::Dictionary(std::string path):
-  _path(path),
-  _wordFound(false)
+  _path(path)
 {
 }
 
@@ -42,30 +41,46 @@ void            Dictionary::findOccurences(std::string const & number, std::stri
 {
   std::string	numberTmp = number;
 
-  // std::cout << "\tNumber is : " << number << std::endl;
-  for (std::vector<std::string>::iterator it = this->_dictMap[numberTmp[0]].begin(); it != this->_dictMap[numberTmp[0]].end(); ++it)
+  for (std::vector<std::string>::iterator it = this->_dictMap[number[0]].begin(); it != this->_dictMap[number[0]].end(); ++it)
     {
       if ((*it).length() <= numberTmp.length())
 	{
-	  if (isWordMatches(numberTmp, (*it)) == true)
+	  wordStatus ws = isWordMatches(numberTmp, (*it));
+	  if (ws == COMPLETE || ws == VALID_WORD)
 	    {
-	      std::cout << numberTmp << " ===> " << *it << std::endl;
+	      this->_sentence += " ";
+	      this->_sentence += (*it);
+	      if (ws == COMPLETE)
+		this->showSentence(rawNum);
+	      this->findOccurences(number.substr((*it).length(), number.length()), rawNum);
 	    }
 	}
     }
+  this->_sentence.clear();
 }
 
-void            Dictionary::completeWord(std::string &numberTmp, std::string const & rawNum, std::string const & sample)
+Dictionary::wordStatus           Dictionary::isWordMatches(std::string & num, std::string const & sample)
 {
-  if (isWordMatches(numberTmp, sample) == true)
+  std::string		word = sample;
+  std::string		numTmp = num;
+  unsigned int		i = 0;
+
+  
+  for (i = 0; isCharInRule(num[i], word[i]) == true; ++i)
+    ;
+  if (i == word.length())
     {
-      this->_sentence += " ";
-      this->_sentence += sample;
-      // std::cout << "num = \"" << numberTmp << "\"" << std::endl;
-      // std::cout << "sentence = " << this->_sentence << std::endl;
-      this->_sentence.clear();
-      // this->findOccurences(numberTmp, rawNum);
+      if (i != num.length())
+	return VALID_WORD;
+      return COMPLETE;
     }
+  return INVALID_WORD;
+}
+
+void		Dictionary::showSentence(std::string const & rawNum)
+{
+  std::cout << rawNum << ":" << this->_sentence << std::endl;
+  this->_sentence.clear();
 }
 
 bool            Dictionary::isCharInRule(char const & num, char const & sample)
@@ -74,39 +89,5 @@ bool            Dictionary::isCharInRule(char const & num, char const & sample)
   if (found != std::string::npos)
     return true;
   return false;
-}
-
-bool            Dictionary::isWordMatches(std::string & num, std::string const & sample)
-{
-  unsigned int          j = 0;
-
-  //  std::cout << "num == " << num  << " et  sample == " << sample << std::endl;
-  for (unsigned int i = 0; i != sample.length(); ++i)
-    {
-      //      std::cout << sample[i] << " correspond à " 
-      //                << this->_rulesByletter[sample[i]] << " et num[j] == " << num[j] << std::endl;
-      if (this->_rulesByletter[sample[i]] == num[j])
-        {
-          // std::cout << "MATCH !" << std::endl;
-          j++;
-          if (j == num.length() || (i + 1 == sample.length()))
-            {
-	      if (j == num.length() && (i + 1 == sample.length()))
-		this->_wordFound = true;
-              //std::cout << "RETURN TRUE" << std::endl;
-              num.erase(0, j);
-              return true;
-            }
-        }
-      else
-	return false;
-    }
-  return false;
-}
-
-void            Dictionary::resetDict()
-{
-  this->_dict.clear();
-  this->_dict.seekg(0, std::ios::beg);    
 }
 
