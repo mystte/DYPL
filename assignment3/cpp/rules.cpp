@@ -3,6 +3,7 @@
 
 void		Dictionary::initRules()
 {
+
 /*
     E | J N Q | R W X | D S Y | F T | A M | C I V | B K U | L O P | G H Z
     e | j n q | r w x | d s y | f t | a m | c i v | b k u | l o p | g h z
@@ -98,33 +99,4 @@ void		Dictionary::initRules()
       key = this->_rulesByletter[sample[0]];
       this->_dictMap[key].push_back(sample);
     }
-  // std::vector<std::string>::iterator it = this->_dictMap['2'].begin();
-  // for (;it != this->_dictMap['2'].end(); ++it)
-  //   std::cout << *it << std::endl;
-}
-
-std::vector<std::string> const  	Dictionary::appendVector(std::vector<std::string> const & v1, std::vector<std::string> const & v2)
-{
-  std::vector<std::string> res;
-
-  if (!v1.empty())
-    {
-      std::vector<std::string>::const_iterator itV1 = v1.begin();
-      for (; itV1 != v1.end(); ++itV1)
-	{
-	  // std::cout << "itv1 = " << *itV1 << std::endl;
-	  res.push_back((*itV1));
-	}
-    }
-  if (!v2.empty())
-    {
-      std::vector<std::string>::const_iterator itV2 = v2.begin();
-  
-      for (; itV2 != v2.end(); ++itV2)
-	{
-	  // std::cout << "itv2 = " << *itV2 << std::endl;
-	  res.push_back((*itV2));
-	}
-    }
-  return res;
 }

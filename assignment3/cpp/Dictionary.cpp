@@ -39,13 +39,13 @@ void            Dictionary::getSentence(std::string const & number)
 
 void            Dictionary::findOccurences(std::string const & number, std::string const & rawNum)
 {
-  std::string	numberTmp = number;
+  WordStatus	ws;
 
   for (std::vector<std::string>::iterator it = this->_dictMap[number[0]].begin(); it != this->_dictMap[number[0]].end(); ++it)
     {
-      if ((*it).length() <= numberTmp.length())
+      if ((*it).length() <= number.length())
 	{
-	  wordStatus ws = isWordMatches(numberTmp, (*it));
+	  ws = isWordMatches(number, (*it));
 	  if (ws == COMPLETE || ws == VALID_WORD)
 	    {
 	      this->_sentence += " ";
@@ -59,16 +59,13 @@ void            Dictionary::findOccurences(std::string const & number, std::stri
   this->_sentence.clear();
 }
 
-Dictionary::wordStatus           Dictionary::isWordMatches(std::string & num, std::string const & sample)
+Dictionary::WordStatus           Dictionary::isWordMatches(std::string const & num, std::string const & sample)
 {
-  std::string		word = sample;
-  std::string		numTmp = num;
-  unsigned int		i = 0;
-
+  unsigned int		i;
   
-  for (i = 0; isCharInRule(num[i], word[i]) == true; ++i)
+  for (i = 0; isCharInRule(num[i], sample[i]) == true; ++i)
     ;
-  if (i == word.length())
+  if (i == sample.length())
     {
       if (i != num.length())
 	return VALID_WORD;

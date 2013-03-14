@@ -7,7 +7,6 @@
 #include <map>
 #include <fstream>
 #include <vector>
-#include <list>
 
 class		Dictionary
 {
@@ -23,7 +22,7 @@ private:
   
 private:
 
-  enum		wordStatus
+  enum		WordStatus
     {
       VALID_WORD,
       INVALID_WORD,
@@ -31,12 +30,10 @@ private:
     };
 
   void		showSentence(std::string const &);
-  void		initRules();
-  void		findOccurences(std::string const & number, std::string const & rawnum);
-  bool		isCharInRule(char const & num, char const & sample);
-  wordStatus   	isWordMatches(std::string & num, std::string const & sample);
-
-  std::vector<std::string> const  	appendVector(std::vector<std::string> const & v1, std::vector<std::string> const & v2);
+  void 		initRules();
+  void 		findOccurences(std::string const & number, std::string const & rawnum);
+  bool 		isCharInRule(char const & num, char const & sample);
+  WordStatus   	isWordMatches(std::string const & num, std::string const & sample);
 
 public:
   Dictionary(std::string path);
