@@ -29,7 +29,6 @@ private:
   bool		isWordMatches(std::string & num, std::string const & sample);
   void		resetDict();
   void		completeWord(std::string &numberTmp, std::string const & rawNum, std::string const & sample);
-  std::vector<std::string> const  	appendVector(std::vector<std::string> const & v1, std::vector<std::string> const & v2);
 
 public:
   Dictionary(std::string path);

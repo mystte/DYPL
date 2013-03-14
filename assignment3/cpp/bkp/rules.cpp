@@ -1,4 +1,3 @@
-#include <algorithm>
 #include "Dictionary.hh"
 
 void		Dictionary::initRules()
@@ -82,49 +81,21 @@ void		Dictionary::initRules()
  char				key;
   std::vector<std::string>	vect;
 
-  this->_dictMap['0'] = vect;
-  this->_dictMap['1'] = vect;
-  this->_dictMap['2'] = vect;
-  this->_dictMap['3'] = vect;
-  this->_dictMap['4'] = vect;
-  this->_dictMap['5'] = vect;
-  this->_dictMap['6'] = vect;
-  this->_dictMap['7'] = vect;
-  this->_dictMap['8'] = vect;
-  this->_dictMap['9'] = vect;
-
+  key = 'a';
   while (std::getline(this->_dict, sample))
     {
-      key = this->_rulesByletter[sample[0]];
-      this->_dictMap[key].push_back(sample);
-    }
-  // std::vector<std::string>::iterator it = this->_dictMap['2'].begin();
-  // for (;it != this->_dictMap['2'].end(); ++it)
-  //   std::cout << *it << std::endl;
-}
-
-std::vector<std::string> const  	Dictionary::appendVector(std::vector<std::string> const & v1, std::vector<std::string> const & v2)
-{
-  std::vector<std::string> res;
-
-  if (!v1.empty())
-    {
-      std::vector<std::string>::const_iterator itV1 = v1.begin();
-      for (; itV1 != v1.end(); ++itV1)
+      if (key == tolower(sample[0]))
 	{
-	  // std::cout << "itv1 = " << *itV1 << std::endl;
-	  res.push_back((*itV1));
+	  vect.push_back(sample);
+	}
+      else
+	{
+	  // std::vector<std::string>::iterator it = vect.begin();
+	  // for (; it != vect.end(); ++it)
+	  //   std::cout << "stock = " << *it  << std::endl;
+	  key = sample[0];
+	  this->_dictMap[tolower(sample[0])] = vect;
+	  vect.clear();
 	}
     }
-  if (!v2.empty())
-    {
-      std::vector<std::string>::const_iterator itV2 = v2.begin();
-  
-      for (; itV2 != v2.end(); ++itV2)
-	{
-	  // std::cout << "itv2 = " << *itV2 << std::endl;
-	  res.push_back((*itV2));
-	}
-    }
-  return res;
 }
