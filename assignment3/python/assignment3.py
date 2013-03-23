@@ -6,8 +6,11 @@ Authors : stro0335,
 
 '''
 
-dict = input("Please enter dictionary path : ")
-myInput = input("Please enter input path : ")
+#dict = input("Please enter dictionary path : ")
+#myInput = input("Please enter input path : ")
+
+dict = "./test/dictionary.txt"
+myInput = "./test/input.txt"
 
 class   Dictionary:
     def __init__(self, path):

@@ -1,0 +1,150 @@
+'''
+ DYPL - Assignment one
+ authors : stro0335
+
+ ## Run
+  $> java -jar jython_path/jython.jar assignmentOne.py
+'''
+
+import JythonTranslater
+import DYPL
+import math
+import re
+
+class assignment(JythonTranslater.Jtrans):
+
+    def actionPerformed(self, event):
+        self.code             = self.dypl.getCode()
+        self.instructions     = self.code.split('\n')
+        self.loopInstructions = []
+        self.loopParams       = []
+        self.execc(self.instructions)
+    
+    def setDYPL(self, obj):
+        self.dypl    = obj
+        self.xpos    = 0
+        self.ypos    = 0
+        self.angle   = 0
+        self.on      = True
+        self.inLoop  = False
+        self.regExps = [re.compile("\s*pen_down"), re.compile("\s*pen_up"), re.compile("\s*move_forward"),
+                        re.compile("\s*move_backward"), re.compile("\s*move\(\s*([0-9]+|[a-zA-Z]+)\s*([\+|\-|\*]?\s*([0-9]+|[a-zA-Z]+)\s*[\+|\-|\*]?\s*([0-9]+|[a-zA-Z]+))*\s*,\s*([0-9]+|[a-zA-Z]+)\s*([\+|\-|\*]?\s*([0-9]+|[a-zA-Z]+)\s*[\+|\-|\*]?\s*([0-9]+|[a-zA-Z]+))*\s*\)\s*"),
+						re.compile("\s*turn_cw\(\s*([0-9]+|[a-zA-Z]+)\s*([\+|\-|\*]?\s*([0-9]+|[a-zA-Z]+)\s*[\+|\-|\*]?\s*([0-9]+|[a-zA-Z]+))*\s*\)\s*"),
+                        re.compile("\s*turn_ccw\(\s*([0-9]+|[a-zA-Z]+)\s*([\+|\-|\*]?\s*([0-9]+|[a-zA-Z]+)\s*[\+|\-|\*]?\s*([0-9]+|[a-zA-Z]+))*\s*\)\s*"),
+                        re.compile("\s*put\(\s*([0-9]+|[a-zA-Z]+)\s*([\+|\-|\*]?\s*([0-9]+|[a-zA-Z]+)\s*[\+|\-|\*]?\s*([0-9]+|[a-zA-Z]+))*\s*,\s*([0-9]+|[a-zA-Z]+)\s*([\+|\-|\*]?\s*([0-9]+|[a-zA-Z]+)\s*[\+|\-|\*]?\s*([0-9]+|[a-zA-Z]+))*\s*,\s*([0-9]+|[a-zA-Z]+)\s*([\+|\-|\*]?\s*([0-9]+|[a-zA-Z]+)\s*[\+|\-|\*]?\s*([0-9]+|[a-zA-Z]+))*\s*\)\s*"),
+                        re.compile("\s*for\s*[A-Za-z]+\s*=\s*[0-9]+\s*to\s*[0-9]+\s*do"),re.compile("\s*end")]
+        
+        # STATEMENTS 
+	def pen_down(self):
+            self.on = True
+            def pen_up(self):
+                self.on = False
+                def move_backward(self):
+                    if self.on != False:
+            self.move(-1, self.angle)
+            def move_forward(self):
+            if self.on != False:
+            self.move(1, self.angle)		
+    def move(self, step, angle):
+        if self.on != False:
+            self.angle += angle
+            if self.angle >= 360:
+                self.angle -= 360
+            rad  = math.pi * (self.angle) / 180
+            xend = int(round(self.xpos + (step * math.sin(rad))))
+            yend = int(round(self.ypos - (step * math.cos(rad))))
+            self.draw(self.xpos, self.ypos, xend, yend)
+            self.xpos = xend
+            self.ypos = yend
+    def turn_cw(self, angle):
+        self.angle += angle
+        if self.angle >= 360:
+            self.angle -= 360
+    def turn_ccw(self, angle):
+        self.angle -= angle
+        if self.angle < 0:
+            self.angle = self.angle * -1
+    def put(self, xpos, ypos, angle):
+        self.xpos  = xpos
+        self.ypos  = ypos
+        self.angle = angle
+        
+
+
+#   Check if the given instruction matches with the instruction list
+#   and executes instructions given as parameter
+
+    def execc(self, instructions):
+        for count in instructions:
+            i = 0
+            for res in self.regExps:
+                if res.search(count):
+                    value = i
+                i += 1
+            if i == 0:
+                value = -1
+            if value != -1:
+                if value == 8:
+                    self.inLoop = True
+                    self.loopParams = count
+                elif value == 9:
+                    self.inLoop = False
+                    self.mainLoop(self.loopInstructions, self.loopParams)
+                    self.loopInstructions = []
+                    self.loopParams = ""
+                elif self.inLoop == True:
+                    self.loopInstructions.append(count)
+                elif count[-1:] == ')':
+                    eval("self." + count)
+                else:
+                    eval("self." + count + "()")
+            else:
+                print("Your argument is invalid")
+
+# Executes instructions contained in the loop given as parameter
+
+    def mainLoop(self, loopInstructions, loopParams):
+        params = list(re.sub(r'\s+', ' ', loopParams))
+        if params[params.index('=') - 1] != ' ':
+            params.insert(params.index('='), ' ')
+        if params[params.index('=') + 1] != ' ':
+            params.insert(params.index('=') + 1, ' ')
+        paramStr = ''.join(params)
+        paramTab = paramStr.split(' ')
+        print("global " + paramTab[1] + "\n" + paramTab[1] + " = " + paramTab[3] + "\nfor " + paramTab[1] + " in range(" + paramTab[5] + "):\n self.execc(loopInstructions)\n " + paramTab[1] + " += 1")
+        exec("global " + paramTab[1] + "\n" + paramTab[1] + " = " + paramTab[3] + "\nfor " + paramTab[1] + " in range(" + paramTab[5] + "):\n self.execc(loopInstructions)\n " + paramTab[1] + " += 1")
+        
+# Draw function which draws the figure.
+    def draw(self, xstart, ystart, xend, yend):
+        dx = abs(xend - xstart)
+        dy = abs(yend - ystart)
+        s = 0
+        if (xend - xstart) > 0: 
+            sx = 1
+        else:
+			sx = -1
+        if (yend - ystart) > 0: 
+            sy = 1
+        else:
+			sy = -1
+        if dy > dx:
+            s = 1
+            xstart, ystart = ystart, xstart
+            dx, dy = dy, dx
+            sx, sy = sy, sx
+        d = (2 * dy) - dx
+        for i in range(0, dx):
+            if s: 
+                self.dypl.setPixel(ystart, xstart)
+            else:
+				self.dypl.setPixel(xstart, ystart)
+            while d >= 0:
+                ystart = ystart + sy
+                d = d - (2 * dx)
+            xstart = xstart + sx
+            d = d + (2 * dy)
+            self.dypl.setPixel(xend, yend)
+
+
+DYPL(assignment())
+
